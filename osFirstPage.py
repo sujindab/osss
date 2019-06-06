@@ -7,16 +7,23 @@ import os
 import hashlib
 cardnum=""
 i=0
+billMoney = 0
+billAm = 0
 global passHash
 global e1
 global e2
 global e3
 global firebase
 global a
+global billMoney
+global billAm
+global label2
+global label3
 firebase = firebase.FirebaseApplication('https://osss-e0b40.firebaseio.com/', None)
 class App(Tk):
 	global a
 	global result
+	
 	def __init__(self, *args, **kwargs):
 		Tk.__init__(self, *args, **kwargs)
 		#Setup Menu
@@ -79,6 +86,9 @@ class App(Tk):
 		global moneyto
 		moneyto=money
 		global resultto
+
+		global label2
+		global label3
 		if i==1:
 			toHash=e3.get()
 			print len(toHash)
@@ -108,7 +118,15 @@ class App(Tk):
 			f = open('cash.txt','w')
 			f.write(str(money)+'BATH\n')
 			f.close()
-			os.system("lpr -P printer_name cash.txt") #print out
+
+			billMoney=money
+			billAm=ans
+			label2.config(text="Amount : "+str(billMoney))
+			label3.config(text="Balance : "+str(billAm))
+			print billMoney
+			print billAm
+			print "123sasdasdad213thnbv"
+			# os.system("lpr -P printer_name cash.txt") #print out
 			result = firebase.put(a,"amount",ans)
 			result2 = firebase.put(a,"wrongPass",ans)
 			wrongPass = firebase.put(a[1:len(a)], "wrongPass","")
@@ -123,7 +141,7 @@ class App(Tk):
 		f.write(str(moneyto)+'BATH/n')
 		f.write('Balance : '+str(resultto))
 		f.close()
-		os.system("lpr -P printer_name cash.txt") #print out
+		# os.system("lpr -P printer_name cash.txt") #print out
 	# def passCheck(self,context):
 	# 	global firebase
 	# 	global i
@@ -216,6 +234,15 @@ class PageTwo(Frame):
 class PageThree(Frame):
 	def __init__(self, parent, controller):
 		Frame.__init__(self,parent)
+		global label2
+		global label3
+		label = Label(self, text="Bill")
+		label.pack()
+		label2 = Label(self, text="Amount : ")
+		label2.pack()
+		label3 = Label(self, text="Balance : ")
+		label3.pack()
+		
 		start_page = Button(self, text="Yes", command=lambda:controller.billPage(StartPage))
 		start_page.pack()
 		start_page.place(x=70, y=500)
